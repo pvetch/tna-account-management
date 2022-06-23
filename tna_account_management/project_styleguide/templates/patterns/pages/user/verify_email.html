@@ -1,2 +1,23 @@
-{% extends "patterns/base_form_view.html" %}
-{% block title %}Verify your email address{% endblock %}
+{% extends "patterns/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="u-layout">
+    {# The message can be passed here from the resend_email_verification view #}
+    {% for message in messages %}
+    <div class="alert-{{ message.tags }}" role="alert">
+        {{ message | safe }}
+    </div>
+    {% endfor %}
+
+    {% if not user.email_verified %}
+        <p>You would have received an email from The National Archives with instructions on how to verify your email address.</p>
+        <p>Please check your inbox and follow the instructions to verify your account.</p>
+        
+        <p><a href="{% url 'auth_resend_email_verification' %}">Resend email to {{user.email}}</a></p>    
+    {% else %}
+        <p>Your email has been verified. Thank you.</p>
+    {% endif %} 
+</div>
+{% endblock %}

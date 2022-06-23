@@ -1,6 +1,10 @@
+import logging
 from urllib.parse import quote_plus, urlencode, urlparse
 
+from auth0.v3.exceptions import Auth0Error
+from authlib.integrations.django_client import OAuth
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -8,8 +12,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from authlib.integrations.django_client import OAuth
-
+from tna_account_management.utils.auth0 import jobs_client
 
 PROVIDER_NAME = "auth0"
 
@@ -104,3 +107,22 @@ def logout(request):
 
 def logout_success(request):
     return render(request, "patterns/pages/auth/logout_success.html")
+
+
+def resend_email_verification(request):
+    user = request.user
+    payload = {"user_id": user.auth0_id, "client_id": settings.AUTH0_CLIENT_ID}
+
+    try:
+        jobs_client.send_verification_email(payload)
+    except Auth0Error:
+        logging.exception(
+            f"Auth0 error with send_verification_email for {user.auth0_id}."
+        )
+        messages.error(
+            request, "Sorry, an error has occured. Administrators have been notified."
+        )
+    else:
+        messages.success(request, "An email will be sent to you shortly.")
+
+    return redirect("verify_email")
