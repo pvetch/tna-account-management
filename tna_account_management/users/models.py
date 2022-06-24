@@ -171,7 +171,7 @@ class User(AbstractUser):
 
     def check_password(self, raw_password: str) -> bool:
         if self.has_usable_password:
-            return super().check_password()
+            return super().check_password(raw_password)
         try:
             return auth0.check_credentials(self.email, raw_password)
         except Exception:
@@ -195,6 +195,13 @@ class User(AbstractUser):
         self.save(update_fields=["email", "email_verified"])
         if self.auth0_id:
             auth0.users_client.update(self.auth0_id, {"email": self.email})
+
+    @transaction.atomic
+    def update_password(self, raw_password: str):
+        if self.auth0_id:
+            auth0.users_client.update(self.auth0_id, {"password": raw_password})
+        else:
+            self.set_password(raw_password)
 
     def update_address(self, data: Dict[str, str]):
         if not self.auth0_id:
