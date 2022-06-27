@@ -196,12 +196,12 @@ class User(AbstractUser):
         if self.auth0_id:
             auth0.users_client.update(self.auth0_id, {"email": self.email})
 
-    @transaction.atomic
     def update_password(self, raw_password: str):
         if self.auth0_id:
             auth0.users_client.update(self.auth0_id, {"password": raw_password})
         else:
             self.set_password(raw_password)
+            self.save(update_fields=["password"])
 
     def update_address(self, data: Dict[str, str]):
         if not self.auth0_id:
