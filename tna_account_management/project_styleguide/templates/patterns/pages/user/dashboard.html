@@ -29,7 +29,7 @@
                 {% if user.email_verified %}
                     (verified)
                 {% else %}
-                    <a href="{% url 'verify_email' %}">Verify your email</a>
+                    <a href="{% url 'verify_email' %}">(Verify your email)</a>
                 {% endif %}
             </dd>
             {% if not user.is_social %}

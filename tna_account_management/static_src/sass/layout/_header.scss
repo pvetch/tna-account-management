@@ -41,21 +41,8 @@
     align-items: flex-end;
 
     &-list {
-      display: flex;
-      align-items: flex-end;
-      flex-wrap: wrap;
       height: 100%;
-
-      @media only screen and (min-width: $screen__md) {
-        width: 32rem;
-      }
-
-      @media only screen and (max-width: $screen__md) {
-        padding-left: 0;
-      }
-
       margin-bottom: 0;
-      justify-content: space-around; // IE11 only supports space-around and space-between.
       &-item {
         list-style: none;
         height: 3rem;
