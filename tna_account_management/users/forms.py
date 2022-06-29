@@ -18,7 +18,7 @@ class VerifyEmailForm(HelperMixin, forms.Form):
             Button.primary(
                 name="submit",
                 type="submit",
-                value=f"Resend email to {self.user_email}",
+                value=f"Resend verification email",
             ),
         ])
         return fh
