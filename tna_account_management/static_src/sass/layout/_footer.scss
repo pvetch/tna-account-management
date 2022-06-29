@@ -1,7 +1,11 @@
 .footer {
   padding: 20px 10px;
   color: $color--secondary;
-  background-color: $color--primary;
+  background-color: $color--off-black;
+
+  a {
+    color: $color--white;
+  }
 
   &__inner {
     display: flex;

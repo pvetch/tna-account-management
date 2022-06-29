@@ -2,6 +2,12 @@
   background-color: $color__yellow_2;
   display: flex;
   flex-wrap: wrap;
+
+  &__container {
+    width: 100%;
+    padding: 0 2rem;
+  }
+
   &__logo {
     &-holder {
       padding: 1rem;
